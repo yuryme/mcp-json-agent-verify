@@ -1,0 +1,67 @@
+{
+  "uid": "cf60c96b-2396-4d4a-88c2-c0e045ac1dd5",
+  "metaObjectKindUid": "032d8377-500f-4631-b435-1f7f69046674",
+  "editMethod": 0,
+  "title": "Контрагент",
+  "name": "partner",
+  "memo": "",
+  "orderByExpression": "",
+  "displayExpression": "",
+  "listFormUid": "",
+  "itemFormUid": "",
+  "isActive": true,
+  "header": {
+    "uid": "fb106dcb-1154-2b31-b633-02d9480ed9a2",
+    "title": "header",
+    "name": "header",
+    "memo": "",
+    "isModified": false,
+    "columns": [
+      {
+        "uid": "4a7c739c-6012-4e45-bfc0-b78a06db8aec",
+        "title": "Id",
+        "name": "id",
+        "formula": "",
+        "isStandard": true,
+        "renderSettings": {
+          "controlKindUid": ""
+        },
+        "dataSettings": {
+          "dataTypeUid": "b327f82a-ea96-416f-9836-785db28eccac",
+          "stringLength": 100,
+          "numberDigits": 2,
+          "primaryKey": true,
+          "required": false,
+          "unique": false,
+          "defaultValue": null
+        },
+        "dependencies": []
+      },
+      {
+        "uid": "e163c0c4-de77-4e58-a468-f3527b573e4a",
+        "title": "Заголовок",
+        "name": "title",
+        "formula": "",
+        "isStandard": true,
+        "renderSettings": {
+          "controlKindUid": ""
+        },
+        "dataSettings": {
+          "dataTypeUid": "0234c067-7868-46b2-ba8e-e22fae5255cb",
+          "stringLength": 100,
+          "numberDigits": 2,
+          "primaryKey": false,
+          "required": true,
+          "unique": false,
+          "defaultValue": null
+        },
+        "dependencies": []
+      }
+    ]
+  },
+  "detailTables": [],
+  "commands": [],
+  "externalResources": [],
+  "forms": [],
+  "recordsSettings": []
+}

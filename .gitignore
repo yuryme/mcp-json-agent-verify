@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Venv
+.venv/
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+
+# Project data
+data_dir/Output*.txt
+
+# Logs / temp
+*.log
+*.tmp
+
+# Optional artifacts
+*.pptx
+.env
