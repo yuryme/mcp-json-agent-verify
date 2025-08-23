@@ -62,6 +62,7 @@ def update_json_simple(
     output_filename: str = "Output.txt",
     create_missing: bool = True,
 ) -> dict:
+
     """
     Обновляет поля ВЕРХНЕГО уровня в JSON из data_dir/input_filename и
     сохраняет результат в data_dir/output_filename.
@@ -107,6 +108,103 @@ def update_json_simple(
         "changed": changes,
         "total_changed": len(changes),
     }
+
+
+@server.tool()
+def verify_json_fields(filename: str, expectations: dict) -> dict:
+    """
+    Проверяет, что JSON-файл в data_dir содержит ожидаемые значения ВЕРХНЕГО уровня.
+
+    Параметры:
+      filename: имя файла внутри data_dir (например, "Output.txt").
+      expectations: словарь ожидаемых пар "поле -> значение",
+                    например {"title": "Поставщики"}.
+
+    Возвращает:
+      {
+        "ok": bool,                             # true, если все ожидания совпали
+        "mismatches": {                         # расхождения по полям (если есть)
+            "<field>": {"expected": ..., "actual": ...}
+        },
+        "checked": { ... },                     # что проверяли (копия expectations)
+        "error": "текст ошибки" (опционально)   # если чтение/парсинг не удался
+      }
+
+    Ограничения безопасности:
+      - работает только с файлами внутри data_dir;
+      - не допускает поддиректорий и скрытых имён.
+    """
+    import os
+    import json
+
+    # Валидация аргументов
+    if not isinstance(expectations, dict):
+        return {
+            "ok": False,
+            "mismatches": {},
+            "checked": expectations if isinstance(expectations, dict) else {},
+            "error": "expectations must be an object (dict)"
+        }
+
+    if not isinstance(filename, str) or not filename:
+        return {
+            "ok": False,
+            "mismatches": {},
+            "checked": expectations,
+            "error": "filename must be a non-empty string"
+        }
+
+    # Песочница: только прямые файлы в data_dir, без подпапок/обратных слэшей/скрытых имён
+    if "/" in filename or "\\" in filename or filename.startswith("."):
+        return {
+            "ok": False,
+            "mismatches": {},
+            "checked": expectations,
+            "error": "invalid filename (must be a direct file in data_dir)"
+        }
+
+    path = os.path.join(DATA_DIR, filename)
+
+    # Чтение и парсинг JSON
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+            except Exception as e:
+                return {
+                    "ok": False,
+                    "mismatches": {},
+                    "checked": expectations,
+                    "error": f"invalid JSON: {e}"
+                }
+    except FileNotFoundError:
+        return {
+            "ok": False,
+            "mismatches": {},
+            "checked": expectations,
+            "error": f"file not found: {filename}"
+        }
+    except Exception as e:
+        return {
+            "ok": False,
+            "mismatches": {},
+            "checked": expectations,
+            "error": f"cannot read file: {e}"
+        }
+
+    # Проверка только верхнего уровня
+    mismatches = {}
+    for field, expected_value in expectations.items():
+        actual_value = data.get(field, None)
+        if actual_value != expected_value:
+            mismatches[field] = {"expected": expected_value, "actual": actual_value}
+
+    return {
+        "ok": len(mismatches) == 0,
+        "mismatches": mismatches,
+        "checked": expectations
+    }
+
 
 
 if __name__ == "__main__":
