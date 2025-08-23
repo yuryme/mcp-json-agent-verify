@@ -5,7 +5,10 @@ __pycache__/
 *.pyd
 
 # Venv
+venv/
 .venv/
+env/
+ENV/
 
 # Editors/OS
 .vscode/
